@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 3176940822206794641}
   - component: {fileID: 4188655182930424979}
   m_Layer: 7
-  m_Name: Orc_Shamen
+  m_Name: Orc_Shaman
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
