@@ -11,6 +11,7 @@ public class EnemyManager : MonoBehaviour
     // 생성할 적 프리팹 리스트
     [SerializeField] private List<GameObject> enemyPrefabs;
     private Dictionary<string, GameObject> enemyPrefabDic;
+    [SerializeField] private List<GameObject> itemPrefabs;
     // 적을 생성할 영역 리스트
     [SerializeField] private List<Rect> spawnAreas;
     // 기즈모 색상
@@ -117,8 +118,16 @@ public class EnemyManager : MonoBehaviour
     public void RemoveEnemyOnDeath(EnemyController enemy)
     {
         activeEnemies.Remove(enemy);
+
+        CreateRandomItem(enemy.transform.position);
+
         if (enemySpawnComplite && activeEnemies.Count == 0)
             gm.EndOfWave();
+    }
+
+    public void CreateRandomItem(Vector3 position)
+    {
+        GameObject item = Instantiate(itemPrefabs[Random.Range(0, itemPrefabs.Count)], position, Quaternion.identity);
     }
 
     public void StartStage(StageInstance stageInstance)
