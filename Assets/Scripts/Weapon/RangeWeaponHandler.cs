@@ -30,10 +30,13 @@ public class RangeWeaponHandler : WeaponHandler
 
     BulletManager bulletManager;
 
+    private StatHandler statHandler;
+
     protected override void Start()
     {
         base.Start();
         bulletManager = BulletManager.Instance;
+        statHandler = GetComponentInParent<StatHandler>();
     }
 
     public override void Attack()
@@ -41,9 +44,9 @@ public class RangeWeaponHandler : WeaponHandler
         base.Attack();
 
         float bulletSpace = multiBulletAngle;
-        int bulletNumPerShot = this.bulletNumPerShot;
+        int bulletNumPerShot = this.bulletNumPerShot + (int)statHandler.GetStat(StatType.ProjectileCount);
 
-        float minangle = -(bulletNumPerShot / 2f) * bulletSpace + 0.5f * multiBulletAngle;
+        float minangle = -(bulletNumPerShot / 2f) * bulletSpace;
 
         for (int i = 0; i < bulletNumPerShot; i++)
         {

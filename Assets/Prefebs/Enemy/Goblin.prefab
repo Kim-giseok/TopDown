@@ -255,8 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5213ff992bda164bae4a27770bcd671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10
-  speed: 2
+  statData: {fileID: 11400000, guid: ac6717f1b2a91b04183d56af6f7495fe, type: 2}
 --- !u!114 &-6241211822231069196
 MonoBehaviour:
   m_ObjectHideFlags: 0

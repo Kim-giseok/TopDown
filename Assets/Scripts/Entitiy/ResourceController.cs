@@ -8,14 +8,13 @@ public class ResourceController : MonoBehaviour
     [SerializeField] float damageDelay = 0.5f;
 
     BaseController baseController;
-    StatHandler statHanddler;
+    StatHandler statHandler;
     AnimationHandler animationHanddler;
 
     float timeSinceLastChange = float.MaxValue;
 
     public float CurHealth { get; private set; }
-    public float MaxHealth => statHanddler.Health;
-
+    public float MaxHealth => statHandler.GetStat(StatType.Health);
     public AudioClip damageClip;
 
     private Action<float, float> OnChangeHealth;
@@ -23,14 +22,14 @@ public class ResourceController : MonoBehaviour
     void Awake()
     {
         baseController = GetComponent<BaseController>();
-        statHanddler = GetComponent<StatHandler>();
+        statHandler = GetComponent<StatHandler>();
         animationHanddler = GetComponent<AnimationHandler>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        CurHealth = statHanddler.Health;
+        CurHealth = statHandler.GetStat(StatType.Health);
     }
 
     // Update is called once per frame

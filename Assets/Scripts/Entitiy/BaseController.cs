@@ -19,7 +19,7 @@ public class BaseController : MonoBehaviour
     float knockbackDuration = 0.0f;
 
     protected AnimationHandler animHandller;
-    protected StatHandler statHanddler;
+    protected StatHandler statHandler;
 
     [SerializeField] public WeaponHandler weaponPrefab;
     protected WeaponHandler weaponHandler;
@@ -31,7 +31,7 @@ public class BaseController : MonoBehaviour
     {
         _rig = GetComponent<Rigidbody2D>();
         animHandller = GetComponent<AnimationHandler>();
-        statHanddler = GetComponent<StatHandler>();
+        statHandler = GetComponent<StatHandler>();
 
         if (weaponPrefab != null)
             weaponHandler = Instantiate(weaponPrefab, weaponPivot);
@@ -66,7 +66,7 @@ public class BaseController : MonoBehaviour
 
     protected virtual void Movement(Vector2 dir)
     {
-        dir *= statHanddler.Speed;
+        dir *= statHandler.GetStat(StatType.Speed);
         if (knockbackDuration > 0f)
         {
             dir *= 0.2f;
