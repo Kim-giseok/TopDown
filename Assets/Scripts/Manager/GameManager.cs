@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     UIManager uiManager;
     public static bool isFirstLoading = true;
 
+    CameraShake cameraShake;
+
     void Awake()
     {
         instance = this;
@@ -30,6 +32,14 @@ public class GameManager : MonoBehaviour
 
         enemyManager = GetComponentInChildren<EnemyManager>();
         enemyManager.Init(this);
+
+        cameraShake = FindObjectOfType<CameraShake>();
+        MainCameraShake();
+    }
+
+    public void MainCameraShake()
+    {
+        cameraShake.ShakeCamera(1, 1, 1);
     }
 
     void Start()
