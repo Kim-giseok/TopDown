@@ -9,14 +9,24 @@ public class CameraShake : MonoBehaviour
     private CinemachineBasicMultiChannelPerlin perlin;
     private float shakeTimeRemaining;
 
+    bool isInit = false;
+
     void Awake()
+    {
+        if (isInit == false) Init();
+    }
+
+    void Init()
     {
         virtualCamera = GetComponent<CinemachineVirtualCamera>();
         perlin = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        isInit = true;
     }
 
     public void ShakeCamera(float duration, float amplitude, float frequency)
     {
+        if(isInit == false) Init();
+
         if (shakeTimeRemaining > duration)
             return;
 

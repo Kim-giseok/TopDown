@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
 
     CameraShake cameraShake;
 
+    private StageInstance currentStageInstance;
+
     void Awake()
     {
         instance = this;
@@ -55,7 +57,8 @@ public class GameManager : MonoBehaviour
     {
         uiManager.SetPlayGame();
         //StartNextWave();
-        StartStage();
+        //StartStage();
+        LoadOrStartNewStage();
     }
 
     void StartNextWave()
@@ -73,32 +76,54 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        uiManager.SetGameOver();
         enemyManager.StopWave();
+        uiManager.SetGameOver();
+        StageSaveManager.ClearSavedStage();
     }
 
-    public void StartStage()
+    private void LoadOrStartNewStage()
     {
-        StageInfo stageInfo = GetStageInfo(currentStageIndex);
+        StageInstance savedInstance = StageSaveManager.LoadStageInstance();
+
+        if (savedInstance != null)
+        {
+            currentStageInstance = savedInstance;
+        }
+        else
+        {
+            currentStageInstance = new StageInstance(0, 0);
+        }
+
+        StartStage(currentStageInstance);
+    }
+
+    public void StartStage(StageInstance stageInstance)
+    {
+        currentStageIndex = stageInstance.stageKey;
+        currentWaveIndex = stageInstance.currentWave;
+
+        StageInfo stageInfo = GetStageInfo(stageInstance.stageKey);
 
         if (stageInfo == null)
         {
             Debug.Log("스테이지 정보가 없습니다.");
+            StageSaveManager.ClearSavedStage();
+            currentStageInstance = null;
             return;
         }
+        stageInstance.SetStageInfo(stageInfo);
 
         uiManager.ChangeWave(currentStageIndex + 1);
-
-        enemyManager.StartStage(stageInfo.waves[currentWaveIndex]);
+        enemyManager.StartStage(currentStageInstance);
+        StageSaveManager.SaveStageInstance(currentStageInstance);
     }
 
     public void StartNextWaveInStage()
     {
-        StageInfo stageInfo = GetStageInfo(currentStageIndex);
-        if (stageInfo.waves.Length - 1 > currentWaveIndex)
+        if (currentStageInstance.CheckEndOfWave())
         {
-            currentWaveIndex++;
-            StartStage();
+            currentStageInstance.currentWave++;
+            StartStage(currentStageInstance);
         }
         else
         {
@@ -108,9 +133,15 @@ public class GameManager : MonoBehaviour
 
     public void CompleteStage()
     {
-        currentStageIndex++;
-        currentWaveIndex = 0;
-        StartStage();
+        StageSaveManager.ClearSavedStage();
+
+        if (currentStageInstance == null)
+            return;
+
+        currentStageInstance.stageKey += 1;
+        currentStageInstance.currentWave = 0;
+
+        StartStage(currentStageInstance);
     }
 
     private StageInfo GetStageInfo(int stageKey)
